@@ -14,7 +14,7 @@ class WriteToS3
       shovel_file.s3_key = s3_storage_key
       shovel_file.save
       s3ok = write_file_to_s3 s3_storage_key, File.open(full_path), s3_headers
-      return [] if s3ok
+      return if s3ok
       return ["Failed to write file with path: #{full_path}, shovel_file: #{shovel_file.inspect} to S3"]
     end
   end

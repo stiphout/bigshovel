@@ -25,7 +25,15 @@ class FileReader
         # execute each of the actions against the file
         context = {:file => true}
         @actions.each do |action|
-          @error_list.concat(action.execute(full_path + '/' + element, context))
+          puts "About to execute action: #{action.inspect} with context: #{context.inspect} on file: #{element.inspect}"
+          result = action.execute(full_path + '/' + element, context)
+          if result
+            if result.is_a? Array
+              @error_list.concat(result)
+            else
+              @error_list << result
+            end
+          end
         end
       end
     end
@@ -33,7 +41,15 @@ class FileReader
       # execute each of the actions against the directory
       @actions.each do |action|
         context = {:directory => true}
-        @error_list.concat(action.execute(full_path + '/' + directory, context))
+        puts "About to execute action: #{action.inspect} with context: #{context.inspect} on directory #{directory.inspect}"
+        result = action.execute(full_path + '/' + directory, context)
+        if result
+          if result.is_a? Array
+            @error_list.concat(result)
+          else
+            @error_list << result
+          end
+        end
       end
       @error_list.concat(process_directory(full_path + '/' + directory))
     end
