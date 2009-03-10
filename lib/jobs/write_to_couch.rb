@@ -9,22 +9,19 @@ class WriteToCouch
       if !shovel_directory
         shovel_directory = create_shovel_directory full_path
         shovel_directory.save
-        context[:shovel_directory] = shovel_directory
-        return []
       end
+      context[:shovel_directory] = shovel_directory
     elsif context [:file]
       # is there already a record for this in Couch?
       shovel_file = find_shovel_file full_path
       if !shovel_file
         shovel_file = create_shovel_file full_path
         shovel_file.save
-        context[:shovel_file] = shovel_file
       else
         puts "Ignoring file as it already exists in Couch."
       end
-      return []
+      context[:shovel_file] = shovel_file
     end
-    return []
   end
 
   def create_shovel_file full_path
